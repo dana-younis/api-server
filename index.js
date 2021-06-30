@@ -2,18 +2,19 @@
 
 require('dotenv').config();
 const mongoose = require('mongoose');
-const server = require('./src/server.js');
+const server = require('./src/server');
+const port = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-const DataBase_URI = process.env.MONGODB_URI
-const port = process.env.PORT
-
-
-mongoose.connect(DataBase_URI, {
+mongoose
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
-    useFindAndModify: false,
     useUnifiedTopology: true,
-    useCreateIndex: true
-}).then(() => {
-    console.log("Connected to DB")
+    useFindAndModify: false,
+  })
+  .then(() => {
     server.start(port);
-}).catch((err) => console.error(err));
+  })
+  .catch((e) => {
+    console.error('CONNECTION ERROR', e.message);
+  });
